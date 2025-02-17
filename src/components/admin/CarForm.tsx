@@ -26,41 +26,71 @@ interface CarFormProps {
 }
 
 export const CarForm = ({ onSubmit, register, isEdit = false, setValue }: CarFormProps) => (
-  <form onSubmit={onSubmit} className="space-y-4">
+  <form onSubmit={onSubmit} className="space-y-4" id="car-form">
     <ImageUpload 
       onImageUploaded={(url) => setValue('image', url)}
     />
     <div>
-      <Label htmlFor="brand">Brand</Label>
-      <Input id="brand" {...register("brand", { required: true })} />
-    </div>
-    <div>
-      <Label htmlFor="model">Model</Label>
-      <Input id="model" {...register("model", { required: true })} />
-    </div>
-    <div>
-      <Label htmlFor="year">Year</Label>
-      <Input
-        id="year"
-        type="number"
-        {...register("year", { required: true, valueAsNumber: true })}
+      <Label htmlFor="car-brand">Brand</Label>
+      <Input 
+        id="car-brand"
+        {...register("brand", { required: true })}
+        autoComplete="off"
+        aria-label="Car brand"
       />
     </div>
     <div>
-      <Label htmlFor="price">Price per hour</Label>
-      <Input
-        id="price"
-        type="number"
-        {...register("price", { required: true, valueAsNumber: true })}
+      <Label htmlFor="car-model">Model</Label>
+      <Input 
+        id="car-model"
+        {...register("model", { required: true })}
+        autoComplete="off"
+        aria-label="Car model"
       />
     </div>
     <div>
-      <Label htmlFor="fuel_type">Fuel Type</Label>
-      <Select defaultValue="petrol" onValueChange={(value) => setValue('fuel_type', value)}>
-        <SelectTrigger className="w-full bg-white">
+      <Label htmlFor="car-year">Year</Label>
+      <Input
+        id="car-year"
+        type="number"
+        min="1900"
+        max={new Date().getFullYear() + 1}
+        {...register("year", { 
+          required: true,
+          valueAsNumber: true,
+          min: 1900,
+          max: new Date().getFullYear() + 1
+        })}
+        autoComplete="off"
+        aria-label="Car year"
+      />
+    </div>
+    <div>
+      <Label htmlFor="car-price">Price per hour</Label>
+      <Input
+        id="car-price"
+        type="number"
+        min="0"
+        step="0.01"
+        {...register("price", { 
+          required: true,
+          valueAsNumber: true,
+          min: 0
+        })}
+        autoComplete="off"
+        aria-label="Price per hour"
+      />
+    </div>
+    <div>
+      <Label htmlFor="car-fuel-type">Fuel Type</Label>
+      <Select 
+        defaultValue="petrol" 
+        onValueChange={(value) => setValue('fuel_type', value)}
+      >
+        <SelectTrigger id="car-fuel-type" className="w-full bg-white">
           <SelectValue placeholder="Select fuel type" />
         </SelectTrigger>
-        <SelectContent className="bg-white">
+        <SelectContent>
           <SelectItem value="petrol">Petrol</SelectItem>
           <SelectItem value="diesel">Diesel</SelectItem>
           <SelectItem value="electric">Electric</SelectItem>
@@ -69,28 +99,45 @@ export const CarForm = ({ onSubmit, register, isEdit = false, setValue }: CarFor
       </Select>
     </div>
     <div>
-      <Label htmlFor="seating_capacity">Seating Capacity</Label>
+      <Label htmlFor="car-seating">Seating Capacity</Label>
       <Input
-        id="seating_capacity"
+        id="car-seating"
         type="number"
-        {...register("seating_capacity", { required: true, valueAsNumber: true })}
+        min="1"
+        max="10"
+        {...register("seating_capacity", { 
+          required: true,
+          valueAsNumber: true,
+          min: 1,
+          max: 10
+        })}
+        autoComplete="off"
+        aria-label="Seating capacity"
       />
     </div>
     <div>
-      <Label htmlFor="transmission">Transmission</Label>
-      <Select defaultValue="manual" onValueChange={(value) => setValue('transmission', value)}>
-        <SelectTrigger className="w-full bg-white">
+      <Label htmlFor="car-transmission">Transmission</Label>
+      <Select 
+        defaultValue="manual" 
+        onValueChange={(value) => setValue('transmission', value)}
+      >
+        <SelectTrigger id="car-transmission" className="w-full bg-white">
           <SelectValue placeholder="Select transmission" />
         </SelectTrigger>
-        <SelectContent className="bg-white">
+        <SelectContent>
           <SelectItem value="manual">Manual</SelectItem>
           <SelectItem value="automatic">Automatic</SelectItem>
         </SelectContent>
       </Select>
     </div>
     <div>
-      <Label htmlFor="description">Description</Label>
-      <Textarea id="description" {...register("description")} />
+      <Label htmlFor="car-description">Description</Label>
+      <Textarea 
+        id="car-description"
+        {...register("description")}
+        autoComplete="off"
+        aria-label="Car description"
+      />
     </div>
     <Button type="submit" className="w-full">
       {isEdit ? "Update Car" : "Add Car"}

@@ -1,7 +1,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
 import { Filter, Plus } from "lucide-react";
 import { useState } from "react";
 import { useCars } from "@/hooks/use-cars";
@@ -32,7 +32,16 @@ export const CarsSection = () => {
   const isMobile = useIsMobile();
   const { cars, addCar, updateCar, deleteCar } = useCars();
 
-  const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, setValue: setAddValue } = useForm<CarFormData>();
+  const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, setValue: setAddValue } = useForm<CarFormData>({
+    defaultValues: {
+      year: new Date().getFullYear(),
+      price: 0,
+      seating_capacity: 5,
+      fuel_type: 'petrol',
+      transmission: 'manual'
+    }
+  });
+  
   const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, setValue } = useForm<CarFormData>();
 
   const onAddSubmit = async (data: CarFormData) => {
@@ -95,21 +104,30 @@ export const CarsSection = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="flex-1"
+          id="car-search"
+          aria-label="Search cars"
         />
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" aria-label="Filter cars">
               <Filter className="h-4 w-4" />
             </Button>
           </SheetTrigger>
           <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
             <SheetHeader>
               <SheetTitle>Filter Cars</SheetTitle>
+              <SheetDescription>
+                Filter your car listings by various criteria.
+              </SheetDescription>
             </SheetHeader>
             {/* Filter options will be implemented later */}
           </SheetContent>
         </Sheet>
-        <Button size="icon" onClick={() => setIsAddSheetOpen(true)}>
+        <Button 
+          size="icon" 
+          onClick={() => setIsAddSheetOpen(true)}
+          aria-label="Add new car"
+        >
           <Plus className="h-4 w-4" />
         </Button>
       </div>
@@ -126,9 +144,15 @@ export const CarsSection = () => {
       </div>
 
       <Sheet open={isAddSheetOpen} onOpenChange={setIsAddSheetOpen}>
-        <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
+        <SheetContent 
+          side={isMobile ? "bottom" : "right"} 
+          className="overflow-y-auto"
+        >
           <SheetHeader>
             <SheetTitle>Add New Car</SheetTitle>
+            <SheetDescription>
+              Fill in the details to add a new car to your fleet.
+            </SheetDescription>
           </SheetHeader>
           <ScrollArea className="h-[calc(100vh-8rem)] px-1">
             <CarForm 
@@ -141,9 +165,15 @@ export const CarsSection = () => {
       </Sheet>
 
       <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
-        <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
+        <SheetContent 
+          side={isMobile ? "bottom" : "right"} 
+          className="overflow-y-auto"
+        >
           <SheetHeader>
             <SheetTitle>Edit Car</SheetTitle>
+            <SheetDescription>
+              Modify the details of your existing car.
+            </SheetDescription>
           </SheetHeader>
           <ScrollArea className="h-[calc(100vh-8rem)] px-1">
             <CarForm
