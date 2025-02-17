@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const carImages = [
   "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80",
@@ -10,6 +11,7 @@ const carImages = [
 ];
 
 const Hero = () => {
+  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -52,6 +54,7 @@ const Hero = () => {
         <Button
           size="lg"
           className="bg-accent hover:bg-accent-dark text-white animate-fade-up"
+          onClick={() => navigate('/cars')}
         >
           Browse Cars <ChevronRight className="ml-2 h-5 w-5" />
         </Button>

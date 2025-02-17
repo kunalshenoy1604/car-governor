@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -40,7 +39,6 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Navbar from "@/components/Navbar";
 
-// Mock data for development
 const mockCar = {
   id: "1",
   brand: "BMW",
@@ -206,85 +204,87 @@ const CarDetails = () => {
                   Book Now
                 </Button>
               </SheetTrigger>
-              <SheetContent className="w-[90vw] sm:max-w-[540px]">
+              <SheetContent className="w-[90vw] sm:max-w-[540px] overflow-y-auto h-full">
                 <SheetHeader>
                   <SheetTitle>Book Your Ride</SheetTitle>
                   <SheetDescription>
                     Please fill in your details to book this car.
                   </SheetDescription>
                 </SheetHeader>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-6">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="John Doe" {...field} />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input placeholder="john@example.com" {...field} />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Phone Number</FormLabel>
-                          <FormControl>
-                            <Input placeholder="+1 234 567 8900" {...field} />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="hours"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Rental Duration (hours)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min="1"
-                              {...field}
-                              onChange={e => field.onChange(parseInt(e.target.value))}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <div className="space-y-2">
-                      <FormLabel>Start Date</FormLabel>
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        className="rounded-md border"
-                        disabled={(date) => date < new Date()}
+                <div className="h-[calc(100vh-180px)] overflow-y-auto pb-20">
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-6">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Full Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="John Doe" {...field} />
+                            </FormControl>
+                          </FormItem>
+                        )}
                       />
-                    </div>
-                    <SheetFooter>
-                      <Button type="submit" className="w-full bg-accent hover:bg-accent-dark">
-                        Confirm Booking
-                      </Button>
-                    </SheetFooter>
-                  </form>
-                </Form>
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input placeholder="john@example.com" {...field} />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone Number</FormLabel>
+                            <FormControl>
+                              <Input placeholder="+1 234 567 8900" {...field} />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="hours"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Rental Duration (hours)</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="1"
+                                {...field}
+                                onChange={e => field.onChange(parseInt(e.target.value))}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <div className="space-y-2">
+                        <FormLabel>Start Date</FormLabel>
+                        <Calendar
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={setSelectedDate}
+                          className="rounded-md border w-full"
+                          disabled={(date) => date < new Date()}
+                        />
+                      </div>
+                      <div className="sticky bottom-0 bg-white py-4 border-t mt-6">
+                        <Button type="submit" className="w-full bg-accent hover:bg-accent-dark">
+                          Confirm Booking
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </div>
               </SheetContent>
             </Sheet>
           </motion.div>

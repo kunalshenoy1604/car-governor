@@ -4,17 +4,20 @@ import Navbar from "@/components/Navbar";
 import CarFilter from "@/components/CarFilter";
 import CarGrid from "@/components/CarGrid";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Filter } from "lucide-react";
+import { Filter, Mail } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useCars } from "@/hooks/use-cars";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/use-auth";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Cars = () => {
   const isMobile = useIsMobile();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { cars, isLoading } = useCars();
   const [filteredCars, setFilteredCars] = useState(cars || []);
+  const { user } = useAuth();
 
   const FilterSection = () => (
     <motion.div
@@ -30,6 +33,22 @@ const Cars = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
       <div className="container mx-auto px-4 pt-16 md:pt-20">
+        {user && !user.email_confirmed_at && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <Alert variant="default">
+              <Mail className="h-4 w-4" />
+              <AlertTitle>Email Verification Required</AlertTitle>
+              <AlertDescription>
+                Please verify your email address to access our car listings. Check your inbox for the verification link.
+              </AlertDescription>
+            </Alert>
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
