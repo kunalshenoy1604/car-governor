@@ -9,6 +9,114 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          car_id: string
+          created_at: string
+          duration: number
+          id: string
+          start_date: string
+          status: string | null
+          total_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          car_id: string
+          created_at?: string
+          duration: number
+          id?: string
+          start_date: string
+          status?: string | null
+          total_price: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          car_id?: string
+          created_at?: string
+          duration?: number
+          id?: string
+          start_date?: string
+          status?: string | null
+          total_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "cars"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cars: {
+        Row: {
+          available: boolean | null
+          brand: string
+          created_at: string
+          description: string | null
+          features: string[] | null
+          fuel_type: string
+          id: string
+          image: string
+          images: string[] | null
+          model: string
+          price: number
+          seating_capacity: number
+          specs: Json | null
+          transmission: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          available?: boolean | null
+          brand: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          fuel_type: string
+          id?: string
+          image: string
+          images?: string[] | null
+          model: string
+          price: number
+          seating_capacity: number
+          specs?: Json | null
+          transmission: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          available?: boolean | null
+          brand?: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          fuel_type?: string
+          id?: string
+          image?: string
+          images?: string[] | null
+          model?: string
+          price?: number
+          seating_capacity?: number
+          specs?: Json | null
+          transmission?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
