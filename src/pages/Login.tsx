@@ -41,11 +41,11 @@ const Login = () => {
         description: "You have successfully logged in.",
       });
 
-      // Redirect based on role
+      // Redirect to home page by default, only admins go to admin panel
       if (profile?.role === 'admin') {
         navigate("/admin");
       } else {
-        navigate("/dashboard");
+        navigate("/");
       }
       
     } catch (error: any) {
