@@ -24,16 +24,16 @@ import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
 import {
   ArrowLeft,
   Car,
-  Engine,
   Fuel,
   Gauge,
   Users,
   Calendar as CalendarIcon,
   Clock,
+  CarFront,
+  Power,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -161,15 +161,15 @@ const CarDetails = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div className="flex items-center gap-2 text-gray-600">
-                <Engine className="h-5 w-5 text-accent" />
+                <CarFront className="h-5 w-5 text-accent" />
                 <span>{mockCar.specs.engine}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">
-                <Gauge className="h-5 w-5 text-accent" />
+                <Power className="h-5 w-5 text-accent" />
                 <span>{mockCar.specs.power}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">
-                <Car className="h-5 w-5 text-accent" />
+                <Gauge className="h-5 w-5 text-accent" />
                 <span>{mockCar.specs.topSpeed}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">

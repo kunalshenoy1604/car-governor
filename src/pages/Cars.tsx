@@ -8,7 +8,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Filter } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-// Mock data for initial development
 const mockCars: Car[] = [
   {
     id: "1",
@@ -17,10 +16,25 @@ const mockCars: Car[] = [
     year: 2023,
     price: 75,
     image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80",
+    ],
     features: ["Automatic", "Leather Seats", "GPS"],
     fuelType: "Petrol",
     seatingCapacity: 5,
     transmission: "Automatic",
+    specs: {
+      engine: "3.0L Twin-Turbo",
+      power: "473 hp",
+      topSpeed: "250 km/h",
+      acceleration: "3.8s",
+      fuelEfficiency: "19/25 mpg"
+    },
+    description: "Experience luxury and performance in the BMW M3",
+    availability: {
+      available: true
+    }
   },
   {
     id: "2",
@@ -29,10 +43,25 @@ const mockCars: Car[] = [
     year: 2023,
     price: 65,
     image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80",
+    ],
     features: ["Automatic", "Sunroof", "Bluetooth"],
     fuelType: "Diesel",
     seatingCapacity: 5,
     transmission: "Automatic",
+    specs: {
+      engine: "2.0L Turbo",
+      power: "255 hp",
+      topSpeed: "210 km/h",
+      acceleration: "5.8s",
+      fuelEfficiency: "22/31 mpg"
+    },
+    description: "Elegance meets performance in the Mercedes C-Class",
+    availability: {
+      available: true
+    }
   },
 ];
 
