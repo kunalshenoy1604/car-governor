@@ -1,3 +1,4 @@
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -108,25 +109,9 @@ export const CarsSection = () => {
             {/* Filter options will be implemented later */}
           </SheetContent>
         </Sheet>
-        <Sheet open={isAddSheetOpen} onOpenChange={setIsAddSheetOpen}>
-          <SheetTrigger asChild>
-            <Button size="icon">
-              <Plus className="h-4 w-4" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
-            <SheetHeader>
-              <SheetTitle>Add New Car</SheetTitle>
-            </SheetHeader>
-            <ScrollArea className="h-[calc(100vh-8rem)] px-1">
-              <CarForm 
-                onSubmit={handleSubmitAdd(onAddSubmit)} 
-                register={registerAdd} 
-                setValue={setAddValue}
-              />
-            </ScrollArea>
-          </SheetContent>
-        </Sheet>
+        <Button size="icon" onClick={() => setIsAddSheetOpen(true)}>
+          <Plus className="h-4 w-4" />
+        </Button>
       </div>
 
       <div className="grid gap-4">
@@ -139,6 +124,21 @@ export const CarsSection = () => {
           />
         ))}
       </div>
+
+      <Sheet open={isAddSheetOpen} onOpenChange={setIsAddSheetOpen}>
+        <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Add New Car</SheetTitle>
+          </SheetHeader>
+          <ScrollArea className="h-[calc(100vh-8rem)] px-1">
+            <CarForm 
+              onSubmit={handleSubmitAdd(onAddSubmit)} 
+              register={registerAdd} 
+              setValue={setAddValue}
+            />
+          </ScrollArea>
+        </SheetContent>
+      </Sheet>
 
       <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
         <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
