@@ -1,19 +1,15 @@
-
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Filter, Plus, Edit, Trash2 } from "lucide-react";
+import { Filter, Plus } from "lucide-react";
 import { useState } from "react";
 import { useCars } from "@/hooks/use-cars";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ImageUpload } from "./ImageUpload";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { CarForm } from "./CarForm";
+import { CarCard } from "./CarCard";
 
 type CarFormData = {
   brand: string;
@@ -90,79 +86,6 @@ export const CarsSection = () => {
     }
   };
 
-  const CarForm = ({ onSubmit, register, isEdit = false, setValue }: any) => (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <ImageUpload 
-        onImageUploaded={(url) => setValue('image', url)}
-      />
-      <div>
-        <Label htmlFor="brand">Brand</Label>
-        <Input id="brand" {...register("brand", { required: true })} />
-      </div>
-      <div>
-        <Label htmlFor="model">Model</Label>
-        <Input id="model" {...register("model", { required: true })} />
-      </div>
-      <div>
-        <Label htmlFor="year">Year</Label>
-        <Input
-          id="year"
-          type="number"
-          {...register("year", { required: true, valueAsNumber: true })}
-        />
-      </div>
-      <div>
-        <Label htmlFor="price">Price per hour</Label>
-        <Input
-          id="price"
-          type="number"
-          {...register("price", { required: true, valueAsNumber: true })}
-        />
-      </div>
-      <div>
-        <Label htmlFor="fuel_type">Fuel Type</Label>
-        <Select defaultValue="petrol" onValueChange={(value) => setValue('fuel_type', value)}>
-          <SelectTrigger className="w-full bg-white">
-            <SelectValue placeholder="Select fuel type" />
-          </SelectTrigger>
-          <SelectContent className="bg-white">
-            <SelectItem value="petrol">Petrol</SelectItem>
-            <SelectItem value="diesel">Diesel</SelectItem>
-            <SelectItem value="electric">Electric</SelectItem>
-            <SelectItem value="hybrid">Hybrid</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <Label htmlFor="seating_capacity">Seating Capacity</Label>
-        <Input
-          id="seating_capacity"
-          type="number"
-          {...register("seating_capacity", { required: true, valueAsNumber: true })}
-        />
-      </div>
-      <div>
-        <Label htmlFor="transmission">Transmission</Label>
-        <Select defaultValue="manual" onValueChange={(value) => setValue('transmission', value)}>
-          <SelectTrigger className="w-full bg-white">
-            <SelectValue placeholder="Select transmission" />
-          </SelectTrigger>
-          <SelectContent className="bg-white">
-            <SelectItem value="manual">Manual</SelectItem>
-            <SelectItem value="automatic">Automatic</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <Label htmlFor="description">Description</Label>
-        <Textarea id="description" {...register("description")} />
-      </div>
-      <Button type="submit" className="w-full">
-        {isEdit ? "Update Car" : "Add Car"}
-      </Button>
-    </form>
-  );
-
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
@@ -208,37 +131,12 @@ export const CarsSection = () => {
 
       <div className="grid gap-4">
         {cars.map((car) => (
-          <Card key={car.id}>
-            <CardContent className="p-4">
-              <div className="flex gap-4">
-                <img
-                  src={car.image}
-                  alt={`${car.brand} ${car.model}`}
-                  className="w-20 h-20 rounded-lg object-cover"
-                />
-                <div className="flex-1">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-medium">{`${car.brand} ${car.model}`}</h3>
-                      <p className="text-sm text-gray-600">${car.price}/hour</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleEdit(car)}>
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(car.id)}
-                      >
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <CarCard
+            key={car.id}
+            car={car}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         ))}
       </div>
 
