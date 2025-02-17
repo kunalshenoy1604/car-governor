@@ -104,7 +104,7 @@ const CarDetails = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
       
-      <div className="container mx-auto px-4 pt-16 pb-20">
+      <div className="container mx-auto px-4 pt-24 pb-20">
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -125,7 +125,7 @@ const CarDetails = () => {
               <CarouselContent>
                 {mockCar.images.map((image, index) => (
                   <CarouselItem key={index}>
-                    <div className="aspect-video relative rounded-xl overflow-hidden">
+                    <div className="aspect-[16/10] relative rounded-xl overflow-hidden">
                       <img
                         src={image}
                         alt={`${mockCar.brand} ${mockCar.model}`}
@@ -151,7 +151,7 @@ const CarDetails = () => {
                 {mockCar.brand} {mockCar.model} {mockCar.year}
               </h1>
               <p className="text-xl text-accent font-semibold">
-                ${mockCar.price}/hour
+                ₹{mockCar.price}/hour
               </p>
             </div>
 
