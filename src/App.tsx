@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Cars from "./pages/Cars";
 import CarDetails from "./pages/CarDetails";
 import UserDashboard from "./pages/UserDashboard";
+import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 
 // Create a client
@@ -34,6 +35,7 @@ const App = () => {
               <Route path="/cars" element={<Cars />} />
               <Route path="/cars/:id" element={<CarDetails />} />
               <Route path="/dashboard" element={<UserDashboard />} />
+              <Route path="/admin" element={<AdminPanel />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
