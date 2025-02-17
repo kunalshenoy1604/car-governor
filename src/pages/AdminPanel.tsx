@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,11 +14,15 @@ import {
 } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/hooks/use-auth";
+import { useCars } from "@/hooks/use-cars";
+import { useBookings } from "@/hooks/use-bookings";
+import { useUsers } from "@/hooks/use-users";
+import { useNavigate } from "react-router-dom";
 import {
   Car,
   Users,
   Calendar,
-  Settings,
   Plus,
   Search,
   Filter,
@@ -27,79 +30,39 @@ import {
   Trash2,
   ChevronRight,
   BarChart3,
+  LogOut,
 } from "lucide-react";
-import { Car as CarType } from "@/types/car";
-import { UserProfile, Booking } from "@/types/booking";
-
-// Mock data for development
-const mockBookings: Booking[] = [
-  {
-    id: "1",
-    carId: "1",
-    userId: "1",
-    startDate: "2024-03-15T10:00:00",
-    duration: 4,
-    status: "confirmed",
-    totalPrice: 300,
-    car: {
-      brand: "BMW",
-      model: "M3",
-      year: 2023,
-      image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80",
-    },
-  },
-  // ... more bookings
-];
-
-const mockUsers: UserProfile[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "+1 234 567 8900",
-    bookings: [],
-  },
-  // ... more users
-];
-
-const mockCars: CarType[] = [
-  {
-    id: "1",
-    brand: "BMW",
-    model: "M3",
-    year: 2023,
-    price: 75,
-    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80",
-    images: [],
-    features: ["Leather Seats", "GPS"],
-    fuelType: "Petrol",
-    seatingCapacity: 5,
-    transmission: "Automatic",
-    specs: {
-      engine: "3.0L",
-      power: "473 hp",
-      topSpeed: "250 km/h",
-      acceleration: "3.8s",
-      fuelEfficiency: "19/25 mpg",
-    },
-    description: "",
-    availability: { available: true },
-  },
-  // ... more cars
-];
 
 const AdminPanel = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const isMobile = useIsMobile();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
+  
+  const { profile, isAdmin, signOut, loading: authLoading } = useAuth();
+  const { cars, isLoading: carsLoading, addCar, updateCar, deleteCar } = useCars();
+  const { bookings, isLoading: bookingsLoading, updateBooking, deleteBooking } = useBookings();
+  const { users, isLoading: usersLoading, updateUser, deleteUser } = useUsers();
 
-  const handleDelete = (id: string, type: string) => {
-    toast({
-      title: "Item Deleted",
-      description: `The ${type} has been deleted successfully.`,
-    });
-  };
+  useEffect(() => {
+    if (!authLoading && !isAdmin) {
+      navigate('/');
+      toast({
+        title: "Access Denied",
+        description: "You don't have permission to access this page.",
+        variant: "destructive",
+      });
+    }
+  }, [authLoading, isAdmin, navigate]);
+
+  if (authLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  if (!isAdmin) {
+    return null;
+  }
 
   const renderOverview = () => (
     <div className="grid grid-cols-1 gap-4">
@@ -114,21 +77,21 @@ const AdminPanel = () => {
                 <Car className="h-5 w-5 text-accent" />
                 <span className="text-sm font-medium">Available Cars</span>
               </div>
-              <p className="text-2xl font-bold">12</p>
+              <p className="text-2xl font-bold">{cars.length}</p>
             </div>
             <div className="p-4 rounded-lg bg-accent/10 space-y-2">
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-accent" />
                 <span className="text-sm font-medium">Today's Bookings</span>
               </div>
-              <p className="text-2xl font-bold">5</p>
+              <p className="text-2xl font-bold">{bookings.length}</p>
             </div>
             <div className="p-4 rounded-lg bg-accent/10 space-y-2">
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-accent" />
                 <span className="text-sm font-medium">Active Users</span>
               </div>
-              <p className="text-2xl font-bold">28</p>
+              <p className="text-2xl font-bold">{users.length}</p>
             </div>
             <div className="p-4 rounded-lg bg-accent/10 space-y-2">
               <div className="flex items-center gap-2">
@@ -147,7 +110,7 @@ const AdminPanel = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockBookings.slice(0, 3).map((booking) => (
+            {bookings.slice(0, 3).map((booking) => (
               <div
                 key={booking.id}
                 className="flex items-center justify-between p-4 rounded-lg bg-gray-50"
@@ -210,7 +173,7 @@ const AdminPanel = () => {
       </div>
 
       <div className="grid gap-4">
-        {mockCars.map((car) => (
+        {cars.map((car) => (
           <Card key={car.id}>
             <CardContent className="p-4">
               <div className="flex gap-4">
@@ -232,7 +195,7 @@ const AdminPanel = () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => handleDelete(car.id, "car")}
+                        onClick={() => deleteCar.mutate(car.id)}
                       >
                         <Trash2 className="h-4 w-4 text-red-500" />
                       </Button>
@@ -262,7 +225,7 @@ const AdminPanel = () => {
       </div>
 
       <div className="grid gap-4">
-        {mockBookings.map((booking) => (
+        {bookings.map((booking) => (
           <Card key={booking.id}>
             <CardContent className="p-4">
               <div className="space-y-3">
@@ -283,7 +246,7 @@ const AdminPanel = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleDelete(booking.id, "booking")}
+                    onClick={() => deleteBooking.mutate(booking.id)}
                   >
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
@@ -315,7 +278,7 @@ const AdminPanel = () => {
       </div>
 
       <div className="grid gap-4">
-        {mockUsers.map((user) => (
+        {users.map((user) => (
           <Card key={user.id}>
             <CardContent className="p-4">
               <div className="flex justify-between items-start">
@@ -327,7 +290,7 @@ const AdminPanel = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleDelete(user.id, "user")}
+                  onClick={() => deleteUser.mutate(user.id)}
                 >
                   <Trash2 className="h-4 w-4 text-red-500" />
                 </Button>
@@ -342,8 +305,11 @@ const AdminPanel = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
+          <Button variant="ghost" size="icon" onClick={signOut}>
+            <LogOut className="h-5 w-5" />
+          </Button>
         </div>
       </header>
 
