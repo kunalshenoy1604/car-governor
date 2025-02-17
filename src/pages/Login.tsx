@@ -22,20 +22,32 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
 
+      // Get the user's profile to check if they're an admin
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
       toast({
         title: "Welcome back!",
         description: "You have successfully logged in.",
       });
 
-      // Always redirect to home page first
-      navigate("/");
+      // Redirect based on role
+      if (profile?.role === 'admin') {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+      
     } catch (error: any) {
       toast({
         title: "Error",
