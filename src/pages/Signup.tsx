@@ -40,7 +40,7 @@ const Signup = () => {
         description: "Your account has been created successfully.",
       });
 
-      // Redirect to home page
+      // Redirect to home page instead of dashboard
       navigate("/");
     } catch (error: any) {
       toast({
