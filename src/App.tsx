@@ -12,6 +12,7 @@ import CarDetails from "./pages/CarDetails";
 import UserDashboard from "./pages/UserDashboard";
 import AdminPanel from "./pages/AdminPanel";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 
 // Create a client
@@ -49,6 +50,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/cars" element={<Cars />} />
               <Route path="/cars/:id" element={<CarDetails />} />
               <Route
