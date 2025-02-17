@@ -40,7 +40,7 @@ const CarFilter = ({ cars, onFilterChange }: CarFilterProps) => {
 
   return (
     <Card className="backdrop-blur-sm bg-white/80 border-accent/10">
-      <CardContent className="p-6 space-y-6">
+      <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
         <motion.div
           className="space-y-4"
           initial={{ opacity: 0, y: 20 }}
