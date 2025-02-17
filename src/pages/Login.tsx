@@ -34,12 +34,8 @@ const Login = () => {
         description: "You have successfully logged in.",
       });
 
-      // Redirect based on user role
-      if (isAdmin) {
-        navigate("/admin");
-      } else {
-        navigate("/dashboard");
-      }
+      // Always redirect to home page first
+      navigate("/");
     } catch (error: any) {
       toast({
         title: "Error",
