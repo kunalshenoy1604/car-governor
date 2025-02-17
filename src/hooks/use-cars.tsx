@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { Database } from '@/lib/database.types';
 import { useToast } from '@/hooks/use-toast';
+import { useEffect } from 'react';
 
 type Car = Database['public']['Tables']['cars']['Row'];
 type InsertCar = Database['public']['Tables']['cars']['Insert'];
@@ -12,7 +13,7 @@ export function useCars() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: cars, isLoading } = useQuery({
+  const { data: cars = [], isLoading } = useQuery({
     queryKey: ['cars'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -24,6 +25,28 @@ export function useCars() {
       return data;
     },
   });
+
+  // Set up realtime subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'cars'
+        },
+        (payload) => {
+          queryClient.invalidateQueries({ queryKey: ['cars'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
 
   const addCar = useMutation({
     mutationFn: async (newCar: InsertCar) => {
@@ -37,7 +60,6 @@ export function useCars() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cars'] });
       toast({
         title: 'Success',
         description: 'Car added successfully',
@@ -65,7 +87,6 @@ export function useCars() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cars'] });
       toast({
         title: 'Success',
         description: 'Car updated successfully',
@@ -86,7 +107,6 @@ export function useCars() {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cars'] });
       toast({
         title: 'Success',
         description: 'Car deleted successfully',

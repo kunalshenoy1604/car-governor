@@ -1,74 +1,20 @@
+
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import CarFilter from "@/components/CarFilter";
 import CarGrid from "@/components/CarGrid";
-import { Car } from "@/types/car";
-import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Filter } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
-const mockCars: Car[] = [
-  {
-    id: "1",
-    brand: "BMW",
-    model: "M3",
-    year: 2023,
-    price: 75,
-    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80",
-    ],
-    features: ["Automatic", "Leather Seats", "GPS"],
-    fuelType: "Petrol",
-    seatingCapacity: 5,
-    transmission: "Automatic",
-    specs: {
-      engine: "3.0L Twin-Turbo",
-      power: "473 hp",
-      topSpeed: "250 km/h",
-      acceleration: "3.8s",
-      fuelEfficiency: "19/25 mpg"
-    },
-    description: "Experience luxury and performance in the BMW M3",
-    availability: {
-      available: true
-    }
-  },
-  {
-    id: "2",
-    brand: "Mercedes",
-    model: "C-Class",
-    year: 2023,
-    price: 65,
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80",
-    ],
-    features: ["Automatic", "Sunroof", "Bluetooth"],
-    fuelType: "Diesel",
-    seatingCapacity: 5,
-    transmission: "Automatic",
-    specs: {
-      engine: "2.0L Turbo",
-      power: "255 hp",
-      topSpeed: "210 km/h",
-      acceleration: "5.8s",
-      fuelEfficiency: "22/31 mpg"
-    },
-    description: "Elegance meets performance in the Mercedes C-Class",
-    availability: {
-      available: true
-    }
-  },
-];
+import { useCars } from "@/hooks/use-cars";
+import { motion } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Cars = () => {
-  const [filteredCars, setFilteredCars] = useState<Car[]>(mockCars);
   const isMobile = useIsMobile();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { cars, isLoading } = useCars();
+  const [filteredCars, setFilteredCars] = useState(cars || []);
 
   const FilterSection = () => (
     <motion.div
@@ -76,7 +22,7 @@ const Cars = () => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <CarFilter onFilterChange={setFilteredCars} cars={mockCars} />
+      <CarFilter onFilterChange={setFilteredCars} cars={cars || []} />
     </motion.div>
   );
 
@@ -124,7 +70,21 @@ const Cars = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <CarGrid cars={filteredCars} />
+            {isLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="space-y-4">
+                    <Skeleton className="h-[200px] w-full rounded-lg" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-4 w-1/2" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <CarGrid cars={filteredCars} />
+            )}
           </motion.div>
         </div>
       </div>
