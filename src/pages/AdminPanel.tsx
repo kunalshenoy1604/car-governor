@@ -29,10 +29,16 @@ const AdminPanel = () => {
     }
   }, [authLoading, isAdmin, navigate, toast]);
 
+  // Show loading state while checking authentication
   if (authLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
   }
 
+  // Don't render anything if not admin
   if (!isAdmin) {
     return null;
   }
@@ -42,9 +48,15 @@ const AdminPanel = () => {
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
-          <Button variant="ghost" size="icon" onClick={signOut}>
-            <LogOut className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-600">Welcome, Admin</span>
+            <Button variant="ghost" size="icon" onClick={() => {
+              signOut();
+              navigate('/login');
+            }}>
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </header>
 
