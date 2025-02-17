@@ -23,7 +23,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         {carImages.map((image, index) => (
@@ -38,13 +38,13 @@ const Hero = () => {
               alt={`Luxury car ${index + 1}`}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-black/50" />
           </div>
         ))}
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
+      <div className="relative z-10 container mx-auto px-4 text-center mt-16 md:mt-0">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-down">
           Drive Your Dream Car
         </h1>
