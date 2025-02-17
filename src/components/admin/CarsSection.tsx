@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ImageUpload } from "./ImageUpload";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type CarFormData = {
   brand: string;
@@ -33,7 +35,7 @@ export const CarsSection = () => {
   const isMobile = useIsMobile();
   const { cars, addCar, updateCar, deleteCar } = useCars();
 
-  const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd } = useForm<CarFormData>();
+  const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, setValue: setAddValue } = useForm<CarFormData>();
   const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, setValue } = useForm<CarFormData>();
 
   const onAddSubmit = async (data: CarFormData) => {
@@ -88,8 +90,11 @@ export const CarsSection = () => {
     }
   };
 
-  const CarForm = ({ onSubmit, register, isEdit = false }: any) => (
-    <form onSubmit={onSubmit} className="space-y-4 pt-4">
+  const CarForm = ({ onSubmit, register, isEdit = false, setValue }: any) => (
+    <form onSubmit={onSubmit} className="space-y-4">
+      <ImageUpload 
+        onImageUploaded={(url) => setValue('image', url)}
+      />
       <div>
         <Label htmlFor="brand">Brand</Label>
         <Input id="brand" {...register("brand", { required: true })} />
@@ -115,16 +120,12 @@ export const CarsSection = () => {
         />
       </div>
       <div>
-        <Label htmlFor="image">Image URL</Label>
-        <Input id="image" {...register("image", { required: true })} />
-      </div>
-      <div>
         <Label htmlFor="fuel_type">Fuel Type</Label>
-        <Select defaultValue="petrol" {...register("fuel_type", { required: true })}>
-          <SelectTrigger>
+        <Select defaultValue="petrol" onValueChange={(value) => setValue('fuel_type', value)}>
+          <SelectTrigger className="w-full bg-white">
             <SelectValue placeholder="Select fuel type" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white">
             <SelectItem value="petrol">Petrol</SelectItem>
             <SelectItem value="diesel">Diesel</SelectItem>
             <SelectItem value="electric">Electric</SelectItem>
@@ -142,11 +143,11 @@ export const CarsSection = () => {
       </div>
       <div>
         <Label htmlFor="transmission">Transmission</Label>
-        <Select defaultValue="manual" {...register("transmission", { required: true })}>
-          <SelectTrigger>
+        <Select defaultValue="manual" onValueChange={(value) => setValue('transmission', value)}>
+          <SelectTrigger className="w-full bg-white">
             <SelectValue placeholder="Select transmission" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white">
             <SelectItem value="manual">Manual</SelectItem>
             <SelectItem value="automatic">Automatic</SelectItem>
           </SelectContent>
@@ -177,7 +178,7 @@ export const CarsSection = () => {
               <Filter className="h-4 w-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side={isMobile ? "bottom" : "right"}>
+          <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
             <SheetHeader>
               <SheetTitle>Filter Cars</SheetTitle>
             </SheetHeader>
@@ -190,11 +191,17 @@ export const CarsSection = () => {
               <Plus className="h-4 w-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side={isMobile ? "bottom" : "right"}>
+          <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
             <SheetHeader>
               <SheetTitle>Add New Car</SheetTitle>
             </SheetHeader>
-            <CarForm onSubmit={handleSubmitAdd(onAddSubmit)} register={registerAdd} />
+            <ScrollArea className="h-[calc(100vh-8rem)] px-1">
+              <CarForm 
+                onSubmit={handleSubmitAdd(onAddSubmit)} 
+                register={registerAdd} 
+                setValue={setAddValue}
+              />
+            </ScrollArea>
           </SheetContent>
         </Sheet>
       </div>
@@ -236,15 +243,18 @@ export const CarsSection = () => {
       </div>
 
       <Sheet open={isEditSheetOpen} onOpenChange={setIsEditSheetOpen}>
-        <SheetContent side={isMobile ? "bottom" : "right"}>
+        <SheetContent side={isMobile ? "bottom" : "right"} className="overflow-y-auto">
           <SheetHeader>
             <SheetTitle>Edit Car</SheetTitle>
           </SheetHeader>
-          <CarForm
-            onSubmit={handleSubmitEdit(onEditSubmit)}
-            register={registerEdit}
-            isEdit={true}
-          />
+          <ScrollArea className="h-[calc(100vh-8rem)] px-1">
+            <CarForm
+              onSubmit={handleSubmitEdit(onEditSubmit)}
+              register={registerEdit}
+              isEdit={true}
+              setValue={setValue}
+            />
+          </ScrollArea>
         </SheetContent>
       </Sheet>
     </div>
