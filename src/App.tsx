@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Cars from "./pages/Cars";
 import CarDetails from "./pages/CarDetails";
+import UserDashboard from "./pages/UserDashboard";
 import NotFound from "./pages/NotFound";
 
 // Create a client
@@ -32,6 +33,7 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/cars" element={<Cars />} />
               <Route path="/cars/:id" element={<CarDetails />} />
+              <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
