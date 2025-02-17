@@ -58,9 +58,9 @@ const Cars = () => {
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
 
-    // Create a stylized car shape using MeshStandardMaterial instead of MeshPhongMaterial
+    // Create a stylized car shape
     const geometry = new THREE.BoxGeometry(2, 1, 4);
-    const material = new THREE.MeshStandardMaterial({ 
+    const material = new THREE.MeshPhongMaterial({ 
       color: 0xBFA181,
       metalness: 0.9,
       roughness: 0.1,
