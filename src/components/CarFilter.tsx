@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Car, FilterOptions } from "@/types/car";
+import { motion } from "framer-motion";
 
 interface CarFilterProps {
   cars: Car[];
@@ -27,7 +28,6 @@ const CarFilter = ({ cars, onFilterChange }: CarFilterProps) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
 
-    // Apply filters
     const filtered = cars.filter((car) => {
       return Object.entries(newFilters).every(([filterKey, filterValue]) => {
         if (!filterValue) return true;
@@ -39,55 +39,62 @@ const CarFilter = ({ cars, onFilterChange }: CarFilterProps) => {
   };
 
   return (
-    <Card className="p-4">
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label>Brand</Label>
-          <Select onValueChange={(value) => handleFilterChange("brand", value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="All Brands" />
-            </SelectTrigger>
-            <SelectContent>
-              {uniqueBrands.map((brand) => (
-                <SelectItem key={brand} value={brand}>
-                  {brand}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+    <Card className="backdrop-blur-sm bg-white/80 border-accent/10">
+      <CardContent className="p-6 space-y-6">
+        <motion.div
+          className="space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="space-y-2">
+            <Label className="text-gray-900 font-semibold">Brand</Label>
+            <Select onValueChange={(value) => handleFilterChange("brand", value)}>
+              <SelectTrigger className="w-full bg-white border-accent/20 hover:border-accent focus:border-accent">
+                <SelectValue placeholder="All Brands" />
+              </SelectTrigger>
+              <SelectContent>
+                {uniqueBrands.map((brand) => (
+                  <SelectItem key={brand} value={brand}>
+                    {brand}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-        <div className="space-y-2">
-          <Label>Fuel Type</Label>
-          <Select onValueChange={(value) => handleFilterChange("fuelType", value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="All Fuel Types" />
-            </SelectTrigger>
-            <SelectContent>
-              {uniqueFuelTypes.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+          <div className="space-y-2">
+            <Label className="text-gray-900 font-semibold">Fuel Type</Label>
+            <Select onValueChange={(value) => handleFilterChange("fuelType", value)}>
+              <SelectTrigger className="w-full bg-white border-accent/20 hover:border-accent focus:border-accent">
+                <SelectValue placeholder="All Fuel Types" />
+              </SelectTrigger>
+              <SelectContent>
+                {uniqueFuelTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-        <div className="space-y-2">
-          <Label>Transmission</Label>
-          <Select onValueChange={(value) => handleFilterChange("transmission", value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="All Transmissions" />
-            </SelectTrigger>
-            <SelectContent>
-              {uniqueTransmissions.map((transmission) => (
-                <SelectItem key={transmission} value={transmission}>
-                  {transmission}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+          <div className="space-y-2">
+            <Label className="text-gray-900 font-semibold">Transmission</Label>
+            <Select onValueChange={(value) => handleFilterChange("transmission", value)}>
+              <SelectTrigger className="w-full bg-white border-accent/20 hover:border-accent focus:border-accent">
+                <SelectValue placeholder="All Transmissions" />
+              </SelectTrigger>
+              <SelectContent>
+                {uniqueTransmissions.map((transmission) => (
+                  <SelectItem key={transmission} value={transmission}>
+                    {transmission}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </motion.div>
       </CardContent>
     </Card>
   );
